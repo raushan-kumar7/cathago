@@ -16,9 +16,11 @@ setSecurity(app);
 // Routes import
 import csrfRouter from "./routes/csrf.routes.js";
 import authRouter from "./routes/auth.routes.js";
+import userRouter from "./routes/user.routes.js";
 
 // Routes Declaration
 app.use("/api/v1/csrf", csrfRouter);
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/user", userRouter);
 
 export { app };
