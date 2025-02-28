@@ -99,3 +99,5 @@ User.prototype.generateRefreshToken = function () {
     expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
   });
 };
+
+export default User;

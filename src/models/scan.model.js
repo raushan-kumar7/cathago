@@ -52,3 +52,5 @@ const Scan = sequelize.define("Scan", {
     defaultValue: DataTypes.NOW,
   },
 });
+
+export default Scan; 

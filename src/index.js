@@ -1,11 +1,15 @@
 import dotenv from "dotenv";
 import { app } from "./app.js";
 import { connectDB } from "./config/index.js";
+import models from "./models/index.js"
 
 dotenv.config();
 
 connectDB()
   .then(() => {
+    models.sequelize.sync({alter: true}).then(() => {
+      console.log("Database & Tables created!")
+    })
     app.listen(process.env.PORT || 3600, () => {
       console.log(
         `Server is running on port http://localhost:${process.env.PORT}`

@@ -44,3 +44,5 @@ const Document = sequelize.define("Document", {
     defaultValue: DataTypes.NOW,
   },
 });
+
+export default Document;

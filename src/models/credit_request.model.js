@@ -51,3 +51,5 @@ const CreditRequest = sequelize.define("CreditRequest", {
     defaultValue: DataTypes.NOW,
   },
 });
+
+export default CreditRequest;
