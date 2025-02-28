@@ -11,12 +11,14 @@ app.use(express.urlencoded({ extended: true }));
 // Security Middlewares
 setLogger(app);
 setSecurity(app);
-setCsrf(app);
+//setCsrf(app);
 
 // Routes import
 import csrfRouter from "./routes/csrf.routes.js";
+import authRouter from "./routes/auth.routes.js";
 
 // Routes Declaration
 app.use("/api/v1/csrf", csrfRouter);
+app.use("/api/v1/auth", authRouter);
 
 export { app };

@@ -7,7 +7,7 @@ dotenv.config();
 
 connectDB()
   .then(() => {
-    models.sequelize.sync({alter: true}).then(() => {
+    models.sequelize.sync().then(() => {
       console.log("Database & Tables created!")
     })
     app.listen(process.env.PORT || 3600, () => {

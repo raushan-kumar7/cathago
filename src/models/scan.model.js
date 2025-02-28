@@ -53,4 +53,4 @@ const Scan = sequelize.define("Scan", {
   },
 });
 
-export default Scan; 
+export default Scan;
