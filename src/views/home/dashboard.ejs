@@ -1,0 +1,15 @@
+<% layout('layouts/boilerplate') %>
+
+<section class="flex min-h-screen bg-gradient-to-b from-blue-300/15 to-teal-200/15">
+  <%- include('../partials/sidebar', { currentPage: 'dashboard' }) %>
+
+  <div class="ml-64 w-full">
+    <%- include('../partials/topbar', { title: 'Dashboard' }) %>
+
+    <main class="h-[82vh]">
+        <h1 class="text-2xl font-bold">User Dashboard</h1>
+    </main>
+
+    <%- include('../partials/footer') %>
+  </div>
+</section>

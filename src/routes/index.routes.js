@@ -1,0 +1,24 @@
+import { Router } from "express";
+import {
+  renderDashboard,
+  renderLandingPage,
+} from "../controllers/home.controller.js";
+import { authenticate, checkAuth } from "../middleware/auth.middleware.js";
+import authRouter from "./auth.routes.js";
+import docsRouter from "./document.routes.js";
+import scanRouter from "./scan.routes.js";
+
+const idxRouter = Router();
+
+idxRouter.use(checkAuth);
+
+// Home routes
+idxRouter.route("/").get(renderLandingPage);
+idxRouter.route("/dashboard").get(authenticate, renderDashboard);
+
+// Auth routes
+idxRouter.use("/auth", authRouter);
+idxRouter.use("/documents", docsRouter);
+idxRouter.use("/scans", scanRouter);
+
+export default idxRouter;

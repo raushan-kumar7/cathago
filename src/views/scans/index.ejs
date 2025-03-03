@@ -1,0 +1,210 @@
+<% layout('layouts/boilerplate') %>
+<section class="flex min-h-screen bg-gradient-to-b from-blue-300/15 to-teal-200/15">
+  <%- include('../partials/sidebar', { currentPage: 'documents' }) %>
+  <div class="ml-64 w-full">
+    <%- include('../partials/topbar', { title: 'Document Scanner' }) %>
+    <main class="h-[82vh] p-6 overflow-y-auto">
+      <div class="max-w-5xl mx-auto">
+        <!-- Header section -->
+        <div class="mb-6">
+          <h2 class="text-2xl font-semibold text-gray-800"><%= subTitle || 'Document Scans' %></h2>
+          <p class="text-gray-600">
+            <% if (typeof documents !== 'undefined') { %>
+              Select two documents to scan for similarities and differences
+            <% } else { %>
+              View and manage your document comparison results
+            <% } %>
+          </p>
+        </div>
+
+        <!-- Credits indicator -->
+        <div class="bg-white rounded-lg shadow-sm p-4 mb-6 border border-gray-200">
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="text-gray-700">Available Credits:</span>
+              <span class="ml-2 text-lg font-medium text-blue-600"><%= user.credits %></span>
+            </div>
+            <a href="/credits/purchase" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+              Purchase Credits
+            </a>
+          </div>
+        </div>
+
+        <% if (typeof documents !== 'undefined') { %>
+        <!-- Document selection form - only shown on the new scan page -->
+        <form action="/scans" method="POST" class="bg-white rounded-lg shadow-md p-6 mb-6">
+          <div class="mb-6">
+            <h3 class="text-xl font-medium text-gray-800 mb-4">Select Documents to Compare</h3>
+            
+            <!-- Document 1 selection -->
+            <div class="mb-4">
+              <label for="documentId1" class="block text-gray-700 font-medium mb-2">First Document</label>
+              <select id="documentId1" name="documentId1" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="">-- Select a document --</option>
+                <% documents.forEach(doc => { %>
+                  <option value="<%= doc.id %>"><%= doc.originalName || doc.title %> (<%= new Date(doc.createdAt).toLocaleDateString() %>)</option>
+                <% }) %>
+              </select>
+            </div>
+            
+            <!-- Document 2 selection -->
+            <div>
+              <label for="documentId2" class="block text-gray-700 font-medium mb-2">Second Document</label>
+              <select id="documentId2" name="documentId2" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="">-- Select a document --</option>
+                <% documents.forEach(doc => { %>
+                  <option value="<%= doc.id %>"><%= doc.originalName || doc.title %> (<%= new Date(doc.createdAt).toLocaleDateString() %>)</option>
+                <% }) %>
+              </select>
+            </div>
+          </div>
+          
+          <!-- Scan options -->
+          <div class="mb-6">
+            <h3 class="text-xl font-medium text-gray-800 mb-4">Scan Options</h3>
+            
+            <div class="flex flex-col space-y-3">
+              <label class="inline-flex items-center">
+                <input type="checkbox" name="scanOptions" value="strictComparison" class="rounded text-blue-600 focus:ring-blue-500">
+                <span class="ml-2">Strict comparison (case sensitive)</span>
+              </label>
+              
+              <label class="inline-flex items-center">
+                <input type="checkbox" name="scanOptions" value="highlightMatches" class="rounded text-blue-600 focus:ring-blue-500" checked>
+                <span class="ml-2">Highlight matching sections</span>
+              </label>
+              
+              <label class="inline-flex items-center">
+                <input type="checkbox" name="scanOptions" value="generateReport" class="rounded text-blue-600 focus:ring-blue-500" checked>
+                <span class="ml-2">Generate detailed report</span>
+              </label>
+            </div>
+          </div>
+          
+          <!-- Cost and submit -->
+          <div class="flex items-center justify-between border-t pt-4">
+            <div class="text-gray-700">
+              <span class="font-medium">Cost:</span>
+              <span class="ml-1">1 credit</span>
+            </div>
+            
+            <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+              Start Scan
+            </button>
+          </div>
+        </form>
+        <% } %>
+        
+        <!-- Scans list - shown on both pages -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-xl font-medium text-gray-800">
+              <% if (typeof documents !== 'undefined') { %>
+                Recent Scans
+              <% } else { %>
+                Your Scan History
+              <% } %>
+            </h3>
+            
+            <% if (typeof documents === 'undefined') { %>
+              <a href="/scans/new" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                New Scan
+              </a>
+            <% } %>
+          </div>
+          
+          <% if (typeof scans !== 'undefined' && scans.length > 0) { %>
+            <div class="overflow-x-auto">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead>
+                  <tr>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Documents</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Match %</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  <% scans.forEach(scan => { %>
+                    <% 
+                      // Get the match percentage value from wherever it might be stored
+                      let matchPercent = 0;
+                      if (typeof scan.matchPercentage !== 'undefined') {
+                        matchPercent = scan.matchPercentage;
+                      } else if (typeof scan.similarity !== 'undefined') {
+                        matchPercent = scan.similarity;
+                      } else if (scan.matchDetails && typeof scan.matchDetails === 'string') {
+                        try {
+                          const details = JSON.parse(scan.matchDetails);
+                          if (details.similarity) {
+                            matchPercent = details.similarity;
+                          } else if (details.matchPercentage) {
+                            matchPercent = details.matchPercentage;
+                          }
+                        } catch (e) {
+                          // Parse error, leave at default
+                        }
+                      } else if (scan.result && typeof scan.result === 'string') {
+                        try {
+                          const result = JSON.parse(scan.result);
+                          if (result.similarity) {
+                            matchPercent = result.similarity;
+                          } else if (result.matchPercentage) {
+                            matchPercent = result.matchPercentage;
+                          }
+                        } catch (e) {
+                          // Parse error, leave at default
+                        }
+                      }
+                      
+                      // Determine color class based on match percentage
+                      let colorClass = 'bg-green-100 text-green-800';
+                      if (matchPercent > 70) {
+                        colorClass = 'bg-red-100 text-red-800';
+                      } else if (matchPercent > 30) {
+                        colorClass = 'bg-yellow-100 text-yellow-800';
+                      }
+                    %>
+                    <tr class="hover:bg-gray-50">
+                      <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                        <%= new Date(scan.createdAt).toLocaleDateString() %>
+                      </td>
+                      <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                        <% if (scan.FirstDocument && scan.SecondDocument) { %>
+                          <%= scan.FirstDocument.originalName %> & <%= scan.SecondDocument.originalName %>
+                        <% } else if (scan.doc1Title && scan.doc2Title) { %>
+                          <%= scan.doc1Title %> & <%= scan.doc2Title %>
+                        <% } else { %>
+                          Document comparison
+                        <% } %>
+                      </td>
+                      <td class="px-4 py-3 whitespace-nowrap">
+                        <span class="px-2 py-1 text-xs font-medium rounded-full <%= colorClass %>">
+                          <%= matchPercent.toFixed(1) %>%
+                        </span>
+                      </td>
+                      <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                        <a href="/scans/<%= scan.id %>" class="text-blue-600 hover:text-blue-800">View Results</a>
+                      </td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+            
+            <% if (typeof documents !== 'undefined') { %>
+              <div class="mt-4 text-right">
+                <a href="/scans" class="text-blue-600 hover:text-blue-800">View All Scans →</a>
+              </div>
+            <% } %>
+          <% } else { %>
+            <div class="text-gray-500 py-4 text-center">
+              <p>No scan history yet. Start your first document comparison.</p>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </main>
+    <%- include('../partials/footer') %>
+  </div>
+</section>

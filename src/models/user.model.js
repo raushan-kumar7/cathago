@@ -40,7 +40,7 @@ const User = sequelize.define(
       type: DataTypes.ENUM("user", "admin"),
       defaultValue: "user",
     },
-    availableCredits: {
+    credits: {
       type: DataTypes.INTEGER,
       defaultValue: 20,
     },
@@ -61,6 +61,7 @@ const User = sequelize.define(
     },
   },
   {
+    tableName: "users",
     hooks: {
       beforeCreate: async (user) => {
         if (user.password) {

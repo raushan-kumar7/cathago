@@ -1,0 +1,178 @@
+<% layout('layouts/boilerplate') %>
+<section class="flex min-h-screen bg-gradient-to-b from-blue-300/15 to-teal-200/15">
+  <%- include('../partials/sidebar', { currentPage: 'scans' }) %>
+  <div class="ml-64 w-full">
+    <%- include('../partials/topbar', { title }) %>
+    <main class="h-[82vh] p-6 overflow-y-auto">
+      <div class="max-w-5xl mx-auto">
+        <!-- Header section with back button -->
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h2 class="text-2xl font-semibold text-gray-800"><%= subTitle || 'Scan Results' %></h2>
+            <p class="text-gray-600">Detailed comparison results between documents</p>
+          </div>
+          <a href="/scans" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">
+            Back to Scans
+          </a>
+        </div>
+
+        <!-- Scan summary card -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+          <h3 class="text-xl font-medium text-gray-800 mb-4">Scan Summary</h3>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Left column - scan details -->
+            <div>
+              <div class="space-y-3">
+                <div>
+                  <span class="text-gray-600 block">Scan ID:</span>
+                  <span class="text-gray-900 font-medium">#<%= scan.id %></span>
+                </div>
+                <div>
+                  <span class="text-gray-600 block">Date Performed:</span>
+                  <span class="text-gray-900 font-medium"><%= new Date(scan.createdAt).toLocaleString() %></span>
+                </div>
+                <div>
+                  <span class="text-gray-600 block">Documents Compared:</span>
+                  <span class="text-gray-900 font-medium"><%= scan.FirstDocument.originalName %> & <%= scan.SecondDocument.originalName %></span>
+                </div>
+                <div>
+                  <span class="text-gray-600 block">Credits Used:</span>
+                  <span class="text-gray-900 font-medium"><%= scan.creditsUsed %></span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Right column - match score -->
+            <div class="flex items-center justify-center">
+              <div class="text-center">
+                <div class="text-gray-600 mb-2">Match Score</div>
+                <div class="relative inline-flex items-center justify-center">
+                  <svg class="w-32 h-32">
+                    <circle
+                      cx="64"
+                      cy="64"
+                      r="60"
+                      fill="none"
+                      stroke="#e5e7eb"
+                      stroke-width="8"
+                    />
+                    <circle
+                      cx="64"
+                      cy="64"
+                      r="60"
+                      fill="none"
+                      stroke="<%= scan.matchScore > 70 ? '#ef4444' : (scan.matchScore > 30 ? '#f59e0b' : '#10b981') %>"
+                      stroke-width="8"
+                      stroke-dasharray="<%= Math.PI * 120 %>"
+                      stroke-dashoffset="<%= Math.PI * 120 * (1 - scan.matchScore / 100) %>"
+                      transform="rotate(-90 64 64)"
+                    />
+                  </svg>
+                  <span class="absolute text-3xl font-bold"><%= scan.matchScore %>%</span>
+                </div>
+                <div class="mt-2 text-sm font-medium text-gray-500">
+                  <%= scan.matchScore > 70 ? 'High similarity detected' : (scan.matchScore > 30 ? 'Moderate similarity' : 'Low similarity') %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Match details -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+          <h3 class="text-xl font-medium text-gray-800 mb-4">Match Details</h3>
+          
+          <div class="space-y-4">
+            <% if (matchDetails && matchDetails.matches && matchDetails.matches.length > 0) { %>
+              <!-- Matched sections -->
+              <div>
+                <h4 class="text-lg font-medium text-gray-700 mb-2">Matched Sections</h4>
+                <div class="space-y-3">
+                  <% matchDetails.matches.forEach((match, index) => { %>
+                    <div class="border rounded-md p-4 bg-blue-50">
+                      <div class="flex justify-between items-start mb-2">
+                        <span class="font-semibold text-blue-800">Match #<%= index + 1 %></span>
+                        <span class="text-sm text-gray-600"><%= match.length %> characters</span>
+                      </div>
+                      <div class="bg-white p-3 rounded border border-blue-200 text-gray-800 text-sm overflow-x-auto">
+                        <%= match.text %>
+                      </div>
+                      <div class="mt-2 text-xs text-gray-600 grid grid-cols-2 gap-x-2">
+                        <div>
+                          <span class="font-medium">Document 1:</span> Characters <%= match.position1.start %> - <%= match.position1.end %>
+                        </div>
+                        <div>
+                          <span class="font-medium">Document 2:</span> Characters <%= match.position2.start %> - <%= match.position2.end %>
+                        </div>
+                      </div>
+                    </div>
+                  <% }) %>
+                </div>
+              </div>
+            <% } else { %>
+              <div class="text-gray-500 py-4 text-center">
+                <p>No significant matching sections were found between these documents.</p>
+              </div>
+            <% } %>
+            
+            <!-- Statistics -->
+            <div class="mt-6 border-t pt-6">
+              <h4 class="text-lg font-medium text-gray-700 mb-3">Statistics</h4>
+              
+              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-gray-50 p-3 rounded-md">
+                  <div class="text-sm text-gray-500">Total Matches</div>
+                  <div class="text-xl font-semibold"><%= matchDetails.matches ? matchDetails.matches.length : 0 %></div>
+                </div>
+                
+                <div class="bg-gray-50 p-3 rounded-md">
+                  <div class="text-sm text-gray-500">Matched Characters</div>
+                  <div class="text-xl font-semibold"><%= matchDetails.totalMatchedChars || 0 %></div>
+                </div>
+                
+                <div class="bg-gray-50 p-3 rounded-md">
+                  <div class="text-sm text-gray-500">Document 1 Length</div>
+                  <div class="text-xl font-semibold"><%= matchDetails.doc1Length || scan.FirstDocument.extractedText.length %> chars</div>
+                </div>
+                
+                <div class="bg-gray-50 p-3 rounded-md">
+                  <div class="text-sm text-gray-500">Document 2 Length</div>
+                  <div class="text-xl font-semibold"><%= matchDetails.doc2Length || scan.SecondDocument.extractedText.length %> chars</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Document preview (optional if needed) -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <h3 class="text-xl font-medium text-gray-800 mb-4">Document Preview</h3>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Document 1 -->
+            <div>
+              <h4 class="font-medium text-gray-700 mb-2"><%= scan.FirstDocument.title %></h4>
+              <div class="bg-gray-50 p-4 rounded-md border text-sm text-gray-800 max-h-64 overflow-y-auto whitespace-pre-wrap">
+                <%= scan.FirstDocument.extractedText.substring(0, 500) %><%= scan.FirstDocument.extractedText.length > 500 ? '...' : '' %>
+              </div>
+            </div>
+            
+            <!-- Document 2 -->
+            <div>
+              <h4 class="font-medium text-gray-700 mb-2"><%= scan.SecondDocument.title %></h4>
+              <div class="bg-gray-50 p-4 rounded-md border text-sm text-gray-800 max-h-64 overflow-y-auto whitespace-pre-wrap">
+                <%= scan.SecondDocument.extractedText.substring(0, 500) %><%= scan.SecondDocument.extractedText.length > 500 ? '...' : '' %>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mt-4 text-center">
+            <p class="text-sm text-gray-500">Showing first 500 characters of each document. Full content available in original documents.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+    <%- include('../partials/footer') %>
+  </div>
+</section>
