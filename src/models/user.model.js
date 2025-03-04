@@ -51,17 +51,10 @@ const User = sequelize.define(
     refreshToken: {
       type: DataTypes.STRING,
     },
-    createdAt: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-    },
   },
   {
     tableName: "users",
+    timestamps: true,
     hooks: {
       beforeCreate: async (user) => {
         if (user.password) {
@@ -96,7 +89,7 @@ User.prototype.generateAccessToken = function () {
 };
 
 User.prototype.generateRefreshToken = function () {
-  return jwt.sign({ id: this.id },process.env.REFRESH_TOKEN_SECRET, {
+  return jwt.sign({ id: this.id }, process.env.REFRESH_TOKEN_SECRET, {
     expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
   });
 };
