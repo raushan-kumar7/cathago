@@ -57,7 +57,7 @@ const renderScanForm = asyncHandler(async (req, res) => {
     return res.render("scans/new", {
       title: "Document Scanner",
       subTitle: "Compare Documents",
-      documents,
+      documents: documents,
       scans: recentScans,
       user: req.user || { credits: 0 }, 
       currentPage: 'scans',

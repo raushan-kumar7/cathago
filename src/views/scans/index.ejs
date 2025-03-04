@@ -42,7 +42,7 @@
               <select id="documentId1" name="documentId1" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="">-- Select a document --</option>
                 <% documents.forEach(doc => { %>
-                  <option value="<%= doc.id %>"><%= doc.originalName || doc.title %> (<%= new Date(doc.createdAt).toLocaleDateString() %>)</option>
+                  <option value="<%= doc.id %>"><%= doc.originalName || doc.filename %> (<%= new Date(doc.createdAt).toLocaleDateString() %>)</option>
                 <% }) %>
               </select>
             </div>
