@@ -1,3 +1,5 @@
+import fs from "fs";
+import path from "path";
 import morgan from "morgan";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
@@ -7,8 +9,23 @@ export const setCookieParser = (app) => {
 };
 
 export const setLogger = (app) => {
-  app.use(morgan("dev"));
+  if (process.env.NODE_ENV === 'production') {
+    // Create logs directory if it doesn't exist
+    const logsDirectory = path.join(process.cwd(), 'src', 'logs');
+    if (!fs.existsSync(logsDirectory)) {
+      fs.mkdirSync(logsDirectory, { recursive: true });
+    }
+    
+    const accessLogStream = fs.createWriteStream(
+      path.join(logsDirectory, 'access.log'), 
+      { flags: 'a' }
+    );
+    app.use(morgan('combined', { stream: accessLogStream }));
+  } else {
+    app.use(morgan('dev'));
+  }
 };
+
 
 export const setSecurity = (app) => {
   app.use(

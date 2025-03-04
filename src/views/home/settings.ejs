@@ -1,15 +1,133 @@
 <% layout('layouts/boilerplate') %>
-
 <section class="flex min-h-screen bg-gradient-to-b from-blue-300/15 to-teal-200/15">
-  <%- include('../partials/sidebar', { currentPage: 'dashboard' }) %>
-
+  <%- include('../partials/sidebar', { currentPage: 'settings' }) %>
   <div class="ml-64 w-full">
-    <%- include('../partials/topbar', { title: 'Dashboard' }) %>
+    <%- include('../partials/topbar', { title: 'Settings' }) %>
+    <main class="h-[82vh] p-6 overflow-y-auto">
+      <div class="max-w-5xl mx-auto">
+        <!-- Header section -->
+        <div class="mb-8">
+          <h1 class="text-2xl font-bold text-gray-800">Account Settings</h1>
+          <p class="text-gray-600">Manage your account details and security settings</p>
+        </div>
 
-    <main class="h-[82vh]">
-        <h1>User Dashboard</h1>
+        <!-- Flash messages -->
+        <% if(success && success.length) { %>
+          <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6" role="alert">
+            <p><%= success %></p>
+          </div>
+        <% } %>
+        <% if(error && error.length) { %>
+          <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6" role="alert">
+            <p><%= error %></p>
+          </div>
+        <% } %>
+
+        <!-- Account settings section -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+          <h2 class="text-xl font-semibold mb-4 text-gray-800">Profile Information</h2>
+          <form action="/users/update-profile" method="POST">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                <input type="text" id="username" name="username" value="<%= user.username %>" 
+                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                       required minlength="3" maxlength="50">
+              </div>
+              <div>
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input type="email" id="email" name="email" value="<%= user.email %>" 
+                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                       required>
+              </div>
+            </div>
+            <div class="mt-6">
+              <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                Update Profile
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Password change section -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+          <h2 class="text-xl font-semibold mb-4 text-gray-800">Change Password</h2>
+          <form action="/users/change-password" method="POST">
+            <div class="space-y-4">
+              <div>
+                <label for="currentPassword" class="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
+                <input type="password" id="currentPassword" name="currentPassword" 
+                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                       required>
+              </div>
+              <div>
+                <label for="newPassword" class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+                <input type="password" id="newPassword" name="newPassword" 
+                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                       required minlength="6" maxlength="100">
+                <p class="text-sm text-gray-500 mt-1">Must be at least 6 characters long</p>
+              </div>
+              <div>
+                <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" 
+                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                       required minlength="6" maxlength="100">
+              </div>
+            </div>
+            <div class="mt-6">
+              <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                Change Password
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Account details section (read-only) -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <h2 class="text-xl font-semibold mb-4 text-gray-800">Account Details</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <p class="text-sm text-gray-500">Account Type</p>
+              <p class="font-medium"><%= user.role === 'admin' ? 'Administrator' : 'Standard User' %></p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500">Available Credits</p>
+              <p class="font-medium"><%= user.credits %></p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500">Last Credit Reset</p>
+              <p class="font-medium"><%= new Date(user.lastCreditReset).toLocaleDateString() %></p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-500">Account Created</p>
+              <p class="font-medium"><%= new Date(user.createdAt).toLocaleDateString() %></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Account Deletion  -->
+        <div class="bg-white rounded-lg shadow-md p-6 mt-8">
+          <h2 class="text-xl font-semibold mb-4 text-gray-800">Delete Account</h2>
+          <p class="text-sm text-red-600 mb-4">
+            Warning: Deleting your account is permanent and cannot be undone. All your data will be lost.
+          </p>
+          <form action="/users/delete-account" method="POST" onsubmit="return confirm('Are you sure you want to delete your account? This action cannot be undone.')">
+            <div class="mt-4">
+              <label for="confirmDelete" class="block text-sm font-medium text-gray-700 mb-1">Type <strong>DELETE</strong> to confirm</label>
+              <input type="text" id="confirmDelete" name="confirmDelete" 
+                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500"
+                     required>
+            </div>
+            <div class="mt-6">
+              <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                Delete My Account
+              </button>
+            </div>
+          </form>
+        </div>
+
+      </div>
     </main>
-
     <%- include('../partials/footer') %>
   </div>
 </section>

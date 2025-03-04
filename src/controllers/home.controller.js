@@ -1,34 +1,31 @@
-import { check_reset_credits, get_user } from "../services/user.service.js";
+import { asyncHandler } from "../utils/AsyncHandler.js";
+import { getUserDocs } from "../services/document.service.js";
+import { getUserScans } from "../services/scan.service.js";
 
 const renderLandingPage = (req, res) => {
   res.render("home/landing", {
-    title: "Welcome",
+    title: "DocScan | Document Scanner & Matcher",
     isAuthenticated: !!req.userId,
     url: req.originalUrl,
   });
 };
 
-const renderDashboard = async (req, res) => {
+
+const renderDashboard = asyncHandler(async (req, res) => {
   try {
-    // Get user data
-    const user = await get_user(req.userId);
-
-    // Check and reset credits if necessary
-    await check_reset_credits(req.userId);
-
-    // Refresh user data after potential credit reset
-    const refreshedUser = await get_user(req.userId);
-
-    res.render("home/dashboard", {
+    const documents = await getUserDocs(req.user.id);
+    const recentScans = await getUserScans(req.user.id, 5);
+    
+    return res.render("home/dashboard", {
       title: "Dashboard",
-      user: refreshedUser,
-      isAuthenticated: true,
-      url: req.originalUrl,
+      user: req.user,
+      documents: documents,
+      scans: recentScans
     });
   } catch (error) {
-    req.flash("error", error.message || "Failed to load dashboard");
-    res.redirect("/");
+    req.flash("error", error.message);
+    return res.redirect("/");
   }
-};
+});
 
 export {renderLandingPage, renderDashboard}

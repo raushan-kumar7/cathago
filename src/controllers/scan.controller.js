@@ -60,6 +60,7 @@ const renderScanForm = asyncHandler(async (req, res) => {
       documents,
       scans: recentScans,
       user: req.user || { credits: 0 }, 
+      currentPage: 'scans',
     });
   } catch (error) {
     req.flash("error", error.message || "Could not load scan form");
@@ -76,6 +77,7 @@ const renderScanList = asyncHandler(async (req, res) => {
       subTitle: "Your Document Comparisons",
       scans,
       user: req.user || { credits: 0 },
+      currentPage: 'scans'
     });
   } catch (error) {
     req.flash("error", error.message || "Could not load scan history");
@@ -101,6 +103,7 @@ const renderScanDetails = asyncHandler(async (req, res) => {
       scan,
       matchDetails,
       user: req.user || { credits: 0 },
+      currentPage:'scans',
     });
   } catch (error) {
     req.flash("error", error.message || "Could not load scan details");

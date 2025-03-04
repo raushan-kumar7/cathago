@@ -36,7 +36,7 @@ app.set("views", path.join(__dirname, "views"));
 
 // Debugging middleware to check session data
 app.use((req, res, next) => {
-  console.log("Session Data:", req.session);
+  //console.log("Session Data:", req.session);
   next();
 });
 

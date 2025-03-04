@@ -34,6 +34,7 @@ const renderUploadForm = asyncHandler(async (req, res) => {
       title: "Upload Document",
       subTitle: "New",
       user: req.user || { credits: 0 },
+      currentPage: 'documents',
     });
   } catch (error) {
     req.flash("error", error.message);
@@ -48,6 +49,7 @@ const renderDocumentsList = asyncHandler(async (req, res) => {
       title: "Documents",
       documents,
       user: req.user || { credits: 0 },
+      currentPage: 'documents',
     });
   } catch (error) {
     req.flash("error", error.message);
@@ -67,6 +69,7 @@ const renderDocumentDetails = asyncHandler(async (req, res) => {
       subTitle: document.originalName,
       document,
       user: req.user || { credits: 0 },
+      currentPage: 'documents',
     });
   } catch (error) {
     req.flash("error", error.message);

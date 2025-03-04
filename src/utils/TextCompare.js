@@ -36,7 +36,6 @@ export const compareTexts = async (text1, text2) => {
       },
     };
   } catch (error) {
-    console.error("Error comparing texts:", error);
     throw error;
   }
 };

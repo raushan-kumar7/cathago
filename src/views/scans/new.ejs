@@ -52,26 +52,26 @@
             </div> -->
 
             <!-- Document 1 selection -->
-<div class="mb-4">
-  <label for="documentId1" class="block text-gray-700 font-medium mb-2">First Document</label>
-  <select id="documentId1" name="documentId1" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-    <option value="">-- Select a document --</option>
-    <% documents.forEach(doc => { %>
-      <option value="<%= doc.id %>"><%= doc.id %> - <%= doc.title %> (<%= new Date(doc.createdAt).toLocaleDateString() %>)</option>
-    <% }) %>
-  </select>
-</div>
+            <div class="mb-4">
+              <label for="documentId1" class="block text-gray-700 font-medium mb-2">First Document</label>
+              <select id="documentId1" name="documentId1" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="">-- Select a document --</option>
+                <% documents.forEach(doc => { %>
+                  <option value="<%= doc.id %>"><%= doc.id %> - <%= doc.title %> (<%= new Date(doc.createdAt).toLocaleDateString() %>)</option>
+                <% }) %>
+              </select>
+            </div>
 
-<!-- Document 2 selection -->
-<div>
-  <label for="documentId2" class="block text-gray-700 font-medium mb-2">Second Document</label>
-  <select id="documentId2" name="documentId2" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-    <option value="">-- Select a document --</option>
-    <% documents.forEach(doc => { %>
-      <option value="<%= doc.id %>"><%= doc.id %> - <%= doc.title %> (<%= new Date(doc.createdAt).toLocaleDateString() %>)</option>
-    <% }) %>
-  </select>
-</div>
+            <!-- Document 2 selection -->
+            <div>
+              <label for="documentId2" class="block text-gray-700 font-medium mb-2">Second Document</label>
+              <select id="documentId2" name="documentId2" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="">-- Select a document --</option>
+                <% documents.forEach(doc => { %>
+                  <option value="<%= doc.id %>"><%= doc.id %> - <%= doc.title %> (<%= new Date(doc.createdAt).toLocaleDateString() %>)</option>
+                <% }) %>
+              </select>
+            </div>
 
           </div>
           
@@ -134,7 +134,7 @@
                         <%= new Date(scan.createdAt).toLocaleDateString() %>
                       </td>
                       <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
-                        <%= scan.FirstDocument.title %> & <%= scan.SecondDocument.title %>
+                        <%= scan.FirstDocument.originalName %> & <%= scan.SecondDocument.originalName %>
                       </td>
                       <td class="px-4 py-3 whitespace-nowrap">
                         <span class="px-2 py-1 text-xs font-medium rounded-full <%= scan.matchScore > 70 ? 'bg-red-100 text-red-800' : (scan.matchScore > 30 ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800') %>">

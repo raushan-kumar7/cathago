@@ -1,12 +1,12 @@
 <!-- views/home/landing.ejs -->
- <% layout('layouts/boilerplate') %>
+<% layout('layouts/boilerplate') %>
 <div class="min-h-screen flex flex-col">
   <!-- Hero Section -->
   <section class="bg-gradient-to-br from-blue-500 to-indigo-700 text-white">
     <div class="container mx-auto px-4 py-16 md:py-24">
       <div class="max-w-4xl mx-auto text-center">
-        <h1 class="text-4xl md:text-5xl font-bold mb-6">Welcome to Our Platform</h1>
-        <p class="text-xl md:text-2xl mb-10">Your daily task management solution with a built-in credit system</p>
+        <h1 class="text-4xl md:text-5xl font-bold mb-6">Document Similarity Scanner</h1>
+        <p class="text-xl md:text-2xl mb-10">Advanced document comparison with built-in credit system</p>
         <div class="flex flex-col sm:flex-row justify-center gap-4">
           <% if (!isAuthenticated) { %>
             <a href="/auth/login" class="bg-white text-indigo-700 font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-gray-100 transition duration-300">
@@ -33,29 +33,59 @@
         <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
           <div class="bg-blue-100 text-blue-600 w-12 h-12 rounded-full flex items-center justify-center mb-4">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Document Comparison</h3>
+          <p class="text-gray-600">Upload PDF documents and detect similarities between them.</p>
+        </div>
+        <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
+          <div class="bg-blue-100 text-blue-600 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
           <h3 class="text-xl font-semibold mb-2">Daily Credit System</h3>
-          <p class="text-gray-600">Get 20 credits every day to manage your tasks efficiently.</p>
+          <p class="text-gray-600">Get 20 free credits daily to perform document scans.</p>
         </div>
         <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
           <div class="bg-blue-100 text-blue-600 w-12 h-12 rounded-full flex items-center justify-center mb-4">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
             </svg>
           </div>
-          <h3 class="text-xl font-semibold mb-2">Task Management</h3>
-          <p class="text-gray-600">Organize your tasks with our intuitive interface.</p>
+          <h3 class="text-xl font-semibold mb-2">Detailed Analytics</h3>
+          <p class="text-gray-600">View match scores and highlighted similarities between documents.</p>
         </div>
-        <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
-          <div class="bg-blue-100 text-blue-600 w-12 h-12 rounded-full flex items-center justify-center mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-            </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold text-center mb-12">How It Works</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+        <div class="text-center">
+          <div class="bg-indigo-100 text-indigo-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-2xl font-bold">1</span>
           </div>
-          <h3 class="text-xl font-semibold mb-2">Secure Authentication</h3>
-          <p class="text-gray-600">Your data is protected with our secure login system.</p>
+          <h3 class="text-xl font-semibold mb-2">Upload Documents</h3>
+          <p class="text-gray-600">Upload your PDF documents to our secure platform.</p>
+        </div>
+        <div class="text-center">
+          <div class="bg-indigo-100 text-indigo-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-2xl font-bold">2</span>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Select Comparison</h3>
+          <p class="text-gray-600">Choose which documents to compare and scan options.</p>
+        </div>
+        <div class="text-center">
+          <div class="bg-indigo-100 text-indigo-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-2xl font-bold">3</span>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">View Results</h3>
+          <p class="text-gray-600">Get detailed similarity reports with highlighted matches.</p>
         </div>
       </div>
     </div>
@@ -66,7 +96,7 @@
     <div class="container mx-auto px-4">
       <div class="flex flex-col md:flex-row justify-between items-center">
         <div class="mb-4 md:mb-0">
-          <h3 class="text-xl font-bold">Our Platform</h3>
+          <h3 class="text-xl font-bold">DocScan</h3>
           <p class="text-gray-400">© 2025 All Rights Reserved</p>
         </div>
         <div class="flex space-x-4">
