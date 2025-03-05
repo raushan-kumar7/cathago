@@ -52,7 +52,7 @@ const renderScanForm = asyncHandler(async (req, res) => {
     }
     
     return res.render("scans/new", {
-      title: "Document Scanner",
+      title: "Document Scanner | DocScan",
       subTitle: "Compare Documents",
       documents: documents,
       scans: recentScans,
@@ -70,7 +70,7 @@ const renderScanList = asyncHandler(async (req, res) => {
     const scans = await getUserScans(req.user.id);
     
     return res.render("scans/index", {
-      title: "Scan History",
+      title: "Scan History | DocScan",
       subTitle: "Your Document Comparisons",
       scans,
       user: req.user || { credits: 0 },
@@ -94,7 +94,7 @@ const renderScanDetails = asyncHandler(async (req, res) => {
     const matchDetails = JSON.parse(scan.matchDetails);
     
     return res.render("scans/detail", {
-      title: "Scan Results",
+      title: "Scan Results | DocScan",
       subTitle: `Comparison: ${scan.FirstDocument.originalName} vs ${scan.SecondDocument.originalName}`,
       scan,
       matchDetails,

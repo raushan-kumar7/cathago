@@ -1,15 +1,20 @@
-<header class="flex items-center justify-between bg-teal-50 shadow-md px-6 py-4">
+<header class="flex items-center justify-between bg-gradient-to-r from-teal-50 to-teal-100 shadow-lg px-6 py-4 border-b-2 border-teal-200">
   <div class="flex items-center space-x-4 space-y-4">
-    <h1 class="text-xl font-bold">Dashboard</h1>
+    <h1 class="text-2xl font-bold font-greatVibes text-teal-800 tracking-wider drop-shadow-sm">Dashboard</h1>
   </div>
   <div class="flex items-center space-x-4">
-    <button class="md:hidden focus:outline-none">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <button class="md:hidden focus:outline-none transform transition-transform hover:scale-110 active:scale-95">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-teal-600 hover:text-teal-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
       </svg>
     </button>
-    <div class="bg-blue-800 text-white flex items-center p-2 rounded-md">
-      <h1 class="text-2xl font-bold">Credits: <span class="ml-1"><%= user.credits %></span></h1>
+    <div class="bg-purple-800/30 backdrop-blur-sm text-white flex items-center p-2 rounded-lg shadow-md transition-all duration-300 hover:bg-purple-800/40">
+      <h1 class="text-2xl text-blue-900 font-pacifico font-bold tracking-wider">
+        Credits: 
+        <span class="ml-2 text-xl text-orange-600 bg-orange-100 px-2 py-1 rounded-full shadow-sm font-pacifico">
+          <%= user.credits %>
+        </span>
+      </h1>
     </div>
   </div>
 </header>

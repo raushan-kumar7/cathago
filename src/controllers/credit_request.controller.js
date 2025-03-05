@@ -73,7 +73,7 @@ const getUserCreditRequests = asyncHandler(async (req, res) => {
     const creditRequests = await get_user_credit_requests(userId, page, limit);
 
     res.render("credits/credits_list", {
-      title: "My Credit Requests",
+      title: "My Credit Requests | DocScan",
       user: req.user,
       creditRequests: creditRequests.requests,
       totalPages: creditRequests.totalPages,

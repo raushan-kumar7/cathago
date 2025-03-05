@@ -6,7 +6,15 @@ export default {
     "./public/**/*.html",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        poppins: ["Poppins", "sans-serif"],
+        nunito: ["Nunito", "sans-serif"],
+        inter: ["Inter", "sans-serif"],
+        pacifico: ["Pacifico", "cursive"],
+        greatVibes: ["Great Vibes", "cursive"],
+      },
+    },
   },
   plugins: [],
 };

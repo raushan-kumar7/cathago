@@ -8,7 +8,7 @@ import {
 
 const getSettingsPage = asyncHandler(async (req, res) => {
   res.render("home/settings", {
-    title: "Account Settings",
+    title: "Account Settings | DocScan",
     user: req.user,
     error: req.flash("error"),
     success: req.flash("success"),

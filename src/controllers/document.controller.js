@@ -29,7 +29,7 @@ const uploadDocument = asyncHandler(async (req, res) => {
 const renderUploadForm = asyncHandler(async (req, res) => {
   try {
     return res.render("documents/upload", {
-      title: "Upload Document",
+      title: "Upload Document | DocScan",
       subTitle: "New",
       user: req.user || { credits: 0 },
       currentPage: 'documents',
@@ -44,7 +44,7 @@ const renderDocumentsList = asyncHandler(async (req, res) => {
   try {
     const documents = await getUserDocs(req.user.id);
     return res.render("documents/index", {
-      title: "Documents",
+      title: "Documents | DocScan",
       documents,
       user: req.user || { credits: 0 },
       currentPage: 'documents',
@@ -63,7 +63,7 @@ const renderDocumentDetails = asyncHandler(async (req, res) => {
       return res.redirect("/documents");
     }
     return res.render("documents/detail", {
-      title: "Document",
+      title: "Document | DocScan",
       subTitle: document.originalName,
       document,
       user: req.user || { credits: 0 },
