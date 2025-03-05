@@ -1,0 +1,98 @@
+<% layout('layouts/boilerplate') %>
+<section class="flex min-h-screen bg-gradient-to-b from-blue-300/15 to-teal-200/15">
+  <%- include('../partials/sidebar', { currentPage: 'admin-users' }) %>
+ 
+  <div class="ml-64 w-full">
+    <main class="h-[93vh] p-6 overflow-y-auto">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-800">User Management</h1>
+        <div class="flex space-x-3">
+          <span class="text-sm text-gray-600">Welcome, <%= user.username %></span>
+          <span class="text-sm text-gray-500">Last Login: <%= new Date().toLocaleString() %></span>
+        </div>
+      </div>
+
+      <div class="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-200">
+        <table class="w-full">
+          <thead class="bg-gradient-to-r from-blue-500 to-teal-400 text-white">
+            <tr>
+              <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">ID</th>
+              <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Username</th>
+              <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Email</th>
+              <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Role</th>
+              <th class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider">Created At</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <% if (users && users.length > 0) { %>
+              <% users.forEach((u, index) => { %>
+                <tr class="hover:bg-blue-50/50 transition duration-200 ease-in-out group">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 group-hover:text-gray-900">
+                    <%= index + 1 %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 group-hover:text-blue-600">
+                    <%= u.username %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 group-hover:text-gray-900">
+                    <%= u.email %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
+                      <%= u.role === 'user' ? 'bg-green-100 text-green-800 group-hover:bg-green-200' : 
+                          u.role === 'moderator' ? 'bg-yellow-100 text-yellow-800 group-hover:bg-yellow-200' : 
+                          'bg-gray-100 text-gray-800 group-hover:bg-gray-200' %>">
+                      <%= u.role %>
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 group-hover:text-gray-900">
+                    <%= u.createdAt ? new Date(u.createdAt).toLocaleDateString() : 'N/A' %>
+                  </td>
+                </tr>
+              <% }); %>
+            <% } else { %>
+              <tr>
+                <td colspan="6" class="px-6 py-4 text-center text-gray-500 bg-gray-50">No users found</td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+
+        <% if (totalPages > 1) { %>
+          <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+            <div class="flex-1 flex justify-between sm:hidden">
+              <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                Previous
+              </a>
+              <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                Next
+              </a>
+            </div>
+            <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+              <div>
+                <p class="text-sm text-gray-700">
+                  Showing 
+                  <span class="font-medium"><%= (currentPage - 1) * 10 + 1 %></span>
+                  to 
+                  <span class="font-medium"><%= Math.min(currentPage * 10, totalUsers) %></span>
+                  of 
+                  <span class="font-medium"><%= totalUsers %></span>
+                  results
+                </p>
+              </div>
+              <div>
+                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                  <% for (let i = 1; i <= totalPages; i++) { %>
+                    <a href="#" class="<%= i === currentPage ? 'bg-indigo-50 border-indigo-500 text-indigo-600' : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50' %> relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                      <%= i %>
+                    </a>
+                  <% } %>
+                </nav>
+              </div>
+            </div>
+          </div>
+        <% } %>
+      </div>
+    </main>
+    <%- include('../partials/footer') %>
+  </div>
+</section>

@@ -12,14 +12,12 @@ const uploadDocument = asyncHandler(async (req, res) => {
       return res.status(400).render("error", { message: "No file uploaded" });
     }
     
-    // Check if file is PDF
     if (req.file.mimetype !== "application/pdf") {
       req.flash("error", "Only PDF files are supported");
       return res.redirect("/documents/upload");
     }
     
     const document = await createDocs(req.user.id, req.file);
-    // Redirect to documents page
     req.flash("success", "Document uploaded successfully");
     return res.redirect("/documents");
   } catch (error) {

@@ -9,6 +9,7 @@ import docsRouter from "./document.routes.js";
 import scanRouter from "./scan.routes.js";
 import settingRouter from "./setting.routes.js";
 import creditRouter from "./credit.routes.js";
+import adminRouter from "./admin.routes.js";
 
 const idxRouter = Router();
 
@@ -25,5 +26,6 @@ idxRouter.use("/documents", docsRouter);
 idxRouter.use("/scans", scanRouter);
 idxRouter.use("/users", settingRouter);
 idxRouter.use("/credit-request", creditRouter);
+idxRouter.use("/admin", adminRouter);
 
 export default idxRouter;

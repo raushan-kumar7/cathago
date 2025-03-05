@@ -17,7 +17,7 @@ const renderDashboard = asyncHandler(async (req, res) => {
     const recentScans = await getUserScans(req.user.id, 5);
     
     return res.render("home/dashboard", {
-      title: "Dashboard",
+      title: "Dashboard | DocScan",
       user: req.user,
       documents: documents,
       scans: recentScans

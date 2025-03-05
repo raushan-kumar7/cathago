@@ -10,7 +10,6 @@ const createDocScan = asyncHandler(async (req, res) => {
   try {
     const { documentId1, documentId2, scanOptions = [] } = req.body;
     
-    // Validate document selections
     if (!documentId1 || !documentId2) {
       req.flash("error", "Please select two documents to compare");
       return res.redirect("/scans/new");
@@ -21,13 +20,11 @@ const createDocScan = asyncHandler(async (req, res) => {
       return res.redirect("/scans/new");
     }
     
-    // Check if user has enough credits
     if (req.user.credits < 1) {
       req.flash("error", "Insufficient credits. Please purchase more credits to perform scans.");
       return res.redirect("/credits/purchase");
     }
     
-    // Create scan with options
     const scanConfig = {
       strictComparison: scanOptions.includes('strictComparison'),
       highlightMatches: scanOptions.includes('highlightMatches'),
@@ -94,7 +91,6 @@ const renderScanDetails = asyncHandler(async (req, res) => {
       return res.redirect("/scans");
     }
     
-    // Parse match details
     const matchDetails = JSON.parse(scan.matchDetails);
     
     return res.render("scans/detail", {

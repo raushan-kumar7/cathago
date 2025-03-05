@@ -1,4 +1,151 @@
-<aside
+<% if (user && user.role === 'admin') { %>
+  <aside
+    class="fixed top-0 left-0 w-64 h-full bg-teal-50/10 shadow-md flex flex-col"
+  >
+    <div class="p-6">
+      <div class="flex items-center mb-8">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-8 w-8 text-teal-500 mr-2"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          />
+        </svg>
+        <h1 class="text-4xl font-bold text-teal-600">DocScan</h1>
+      </div>
+  
+      <nav class="flex-1">
+        <ul class="space-y-2">
+          <li>
+            <a
+              href="/admin/dashboard"
+              class="flex items-center p-3 text-gray-800 rounded hover:bg-gray-100 <%= currentPage === 'admin-dashboard' ? 'bg-blue-50 text-blue-600' : '' %>"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 mr-3 text-green-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                />
+              </svg>
+              Admin Dashboard
+            </a>
+          </li>
+          
+          <li>
+            <a
+              href="/admin/users"
+              class="flex items-center p-3 text-gray-700 rounded hover:bg-gray-100 <%= currentPage === 'admin-users' ? 'bg-blue-50 text-blue-600' : '' %>"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 mr-3 text-blue-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                />
+              </svg>
+              User Management
+            </a>
+          </li>
+  
+          <li>
+            <a
+              href="/admin/credit-requests"
+              class="flex items-center p-3 text-gray-700 rounded hover:bg-gray-100 <%= currentPage === 'admin-credit-requests' ? 'bg-blue-50 text-blue-600' : '' %>"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 mr-3 text-purple-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              Credit Requests
+            </a>
+          </li>
+  
+          <li>
+            <a
+              href="/admin/documents"
+              class="flex items-center p-3 text-gray-700 rounded hover:bg-gray-100 <%= currentPage === 'admin-documents' ? 'bg-blue-50 text-blue-600' : '' %>"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 mr-3 text-orange-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"
+                />
+              </svg>
+              Document Management
+            </a>
+          </li>
+
+        </ul>
+      </nav>
+    </div>
+  
+    <div class="mt-auto p-4 border-t">
+      <a
+        href="/auth/logout"
+        class="flex items-center p-3 text-gray-700 rounded hover:bg-gray-100"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5 mr-3 text-red-500"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+          />
+        </svg>
+        Logout
+      </a>
+    </div>
+  </aside>
+
+<% } else {  %>
+
+  <aside
   class="fixed top-0 left-0 w-64 h-full bg-teal-50/10 shadow-md flex flex-col"
 >
   <div class="p-6">
@@ -187,3 +334,4 @@
     </a>
   </div>
 </aside>
+<% } %>

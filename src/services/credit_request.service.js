@@ -4,7 +4,6 @@ import { sequelize } from "../config/index.js";
 const { CreditRequest, User } = models;
 
 const create_credit_request = async (userId, reqCredits, reason) => {
-  // Validate inputs
   if (!userId || reqCredits <= 0 || reason.trim().length < 10) {
     throw new Error("Invalid input parameters");
   }
@@ -30,21 +29,21 @@ const create_credit_request = async (userId, reqCredits, reason) => {
 
 const get_credits_requests = async (page = 1, limit = 10, filter = {}) => {
   const offset = (page - 1) * limit;
-
   const { count, rows } = await CreditRequest.findAndCountAll({
     where: filter,
     include: [
       {
         model: User,
-        as: "User",
+        as: "requester",
         attributes: ["id", "username", "email"],
       },
     ],
     order: [["createdAt", "DESC"]],
     limit,
     offset,
+    nest: true,
+    raw: false,
   });
-
   return {
     totalRequests: count,
     totalPages: Math.ceil(count / limit),
@@ -62,6 +61,10 @@ const process_credit_request = async (
   const txn = await sequelize.transaction();
 
   try {
+    if (!requestId || !adminId || !status) {
+      throw new Error("Invalid input parameters");
+    }
+
     const creditRequest = await CreditRequest.findByPk(requestId, { transaction: txn });
 
     if (!creditRequest) {
@@ -87,7 +90,7 @@ const process_credit_request = async (
       );
     }
 
-    await creditRequest.update(
+    const updatedRequest = await creditRequest.update(
       {
         status,
         reviewedBy: adminId,
@@ -98,7 +101,7 @@ const process_credit_request = async (
     );
 
     await txn.commit();
-    return creditRequest;
+    return updatedRequest;
   } catch (error) {
     await txn.rollback();
     throw error;

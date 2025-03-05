@@ -15,7 +15,7 @@ const getCreditsPage = asyncHandler(async (req, res) => {
     const creditRequests = await get_user_credit_requests(userId, page, limit);
 
     res.render("credits/index", {
-      title: "Credit Requests",
+      title: "Credit Requests | DocScan",
       user: req.user,
       error: req.flash("error"),
       success: req.flash("success"),
@@ -37,7 +37,6 @@ const createCreditsRequest = asyncHandler(async (req, res) => {
     const userId = req.user.id;
     const { reqCredits, reason } = req.body;
 
-    // Validate input
     const requestedCredits = parseInt(reqCredits, 10);
     if (!requestedCredits || requestedCredits <= 0) {
       req.flash("error", "Invalid number of credits requested");
@@ -49,16 +48,13 @@ const createCreditsRequest = asyncHandler(async (req, res) => {
       return res.redirect("/credit-request");
     }
 
-    // Create credit request
     await create_credit_request(userId, requestedCredits, reason);
 
-    // Set success flash message
     req.flash("success", "Credit request submitted successfully");
     res.redirect("/credit-request");
   } catch (error) {
     console.error("Credit request creation error:", error);
     
-    // Handle specific error messages
     const errorMessage = error.message === "You already have a pending credit request" 
       ? error.message 
       : "Failed to process the credits request";

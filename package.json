@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
-    "build:css": "npx tailwindcss -i ./src/public/css/tailwind.css -o ./src/public/css/output.css --watch"
+    "build:css": "npx tailwindcss -i ./src/public/css/tailwind.css -o ./src/public/css/output.css --watch",
+    "create-admin": "node -r dotenv/config ./src/scripts/create-admin.js"
   },
   "keywords": [],
   "author": "Raushan Kumar",

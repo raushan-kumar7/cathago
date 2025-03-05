@@ -1,0 +1,211 @@
+<% layout('layouts/boilerplate') %>
+<section class="flex min-h-screen bg-gradient-to-b from-blue-300/15 to-teal-200/15">
+  <%- include('../partials/sidebar', { currentPage: 'admin-credit-requests' }) %>
+ 
+  <div class="ml-64 w-full">
+    <main class="h-[93vh] p-6 overflow-y-auto">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
+        <div class="flex space-x-3">
+          <span class="text-sm text-gray-600">Welcome, <%= user.username %></span>
+          <span class="text-sm text-gray-500">Last Login: <%= new Date().toLocaleString() %></span>
+        </div>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg overflow-hidden">
+        <table class="w-full">
+          <thead class="bg-gray-100 border-b">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Request ID</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Requested Credits</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reason</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Requested At</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <% if (requests && requests.length > 0) { %>
+              <% requests.forEach((request) => { %>
+                <tr class="hover:bg-gray-50 transition duration-200">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= request.id %></td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    <%= request.requester ? request.requester.username : 'N/A' %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <%= request.requestedCredits %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <%= request.reason %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <%= new Date(request.createdAt).toLocaleDateString() %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <div class="flex space-x-2">
+                      <button 
+                        onclick="openModal('<%= request.id %>', 'approved')" 
+                        class="text-green-600 hover:text-green-900"
+                      >
+                        Approve
+                      </button>
+                      <button 
+                        onclick="openModal('<%= request.id %>', 'rejected')" 
+                        class="text-red-600 hover:text-red-900"
+                      >
+                        Reject
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              <% }); %>
+            <% } else { %>
+              <tr>
+                <td colspan="6" class="px-6 py-4 text-center text-gray-500">No pending credit requests</td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+
+        <% if (totalPages > 1) { %>
+          <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+            <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+              <div>
+                <p class="text-sm text-gray-700">
+                  Showing 
+                  <span class="font-medium"><%= (currentPage - 1) * 10 + 1 %></span>
+                  to 
+                  <span class="font-medium"><%= Math.min(currentPage * 10, totalRequests) %></span>
+                  of 
+                  <span class="font-medium"><%= totalRequests %></span>
+                  results
+                </p>
+              </div>
+              <div>
+                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                  <% for (let i = 1; i <= totalPages; i++) { %>
+                    <a href="#" class="<%= i === currentPage ? 'bg-indigo-50 border-indigo-500 text-indigo-600' : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50' %> relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                      <%= i %>
+                    </a>
+                  <% } %>
+                </nav>
+              </div>
+            </div>
+          </div>
+        <% } %>
+      </div>
+    </main>
+
+    <!-- Modal for Review Notes -->
+    <div id="reviewModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+      <div class="bg-white rounded-lg shadow-xl p-6 w-96">
+        <h2 class="text-xl font-bold mb-4" id="modalTitle">Process Credit Request</h2>
+        <form id="creditRequestForm" action="/admin/credit-requests/process" method="POST">
+          <input type="hidden" name="requestId" id="modalRequestId" value="">
+          <input type="hidden" name="status" id="modalStatus" value="">
+          
+          <div class="mb-4">
+            <label for="reviewNotes" class="block text-sm font-medium text-gray-700">Review Notes</label>
+            <textarea 
+              name="reviewNotes" 
+              id="reviewNotes" 
+              rows="4" 
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              placeholder="Enter review notes (optional)"
+            ></textarea>
+          </div>
+          
+          <div class="flex justify-end space-x-2">
+            <button 
+              type="button" 
+              onclick="closeModal()" 
+              class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
+            >
+              Cancel
+            </button>
+            <button 
+              type="submit" 
+              class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+              id="submitButton"
+            >
+              Confirm
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <%- include('../partials/footer') %>
+  </div>
+</section>
+
+<script>
+  function openModal(requestId, status) {
+    const modal = document.getElementById('reviewModal');
+    const requestIdInput = document.getElementById('modalRequestId');
+    const statusInput = document.getElementById('modalStatus');
+    const submitButton = document.getElementById('submitButton');
+    const modalTitle = document.getElementById('modalTitle');
+
+    if (!modal || !requestIdInput || !statusInput || !submitButton || !modalTitle) {
+      console.error('One or more modal elements not found');
+      return;
+    }
+
+
+    requestIdInput.value = requestId;
+    statusInput.value = status;
+    
+  
+    if (status === 'approved') {
+      modalTitle.textContent = 'Approve Credit Request';
+      submitButton.textContent = 'Approve';
+      submitButton.className = 'px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700';
+    } else {
+      modalTitle.textContent = 'Reject Credit Request';
+      submitButton.textContent = 'Reject';
+      submitButton.className = 'px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700';
+    }
+
+    modal.classList.remove('hidden');
+  }
+
+  function closeModal() {
+    const modal = document.getElementById('reviewModal');
+    if (modal) {
+      modal.classList.add('hidden');
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const approveButtons = document.querySelectorAll('button[onclick*="openModal"][onclick*="approved"]');
+    const rejectButtons = document.querySelectorAll('button[onclick*="openModal"][onclick*="rejected"]');
+    
+    approveButtons.forEach(button => {
+      button.addEventListener('click', (e) => {
+        const requestId = e.target.getAttribute('onclick').match(/'([^']*)'/)[1];
+        openModal(requestId, 'approved');
+      });
+    });
+
+    rejectButtons.forEach(button => {
+      button.addEventListener('click', (e) => {
+        const requestId = e.target.getAttribute('onclick').match(/'([^']*)'/)[1];
+        openModal(requestId, 'rejected');
+      });
+    });
+
+    const modal = document.getElementById('reviewModal');
+    if (modal) {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          closeModal();
+        }
+      });
+
+      const cancelButton = modal.querySelector('button[type="button"]');
+      if (cancelButton) {
+        cancelButton.addEventListener('click', closeModal);
+      }
+    }
+  });
+</script>

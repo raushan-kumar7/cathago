@@ -1,72 +1,115 @@
-<!-- views/auth/register.ejs -->
 <% layout('layouts/boilerplate') %>
-<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-indigo-700 py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-md w-full bg-white rounded-lg shadow-xl overflow-hidden">
-    <div class="px-6 py-8">
-      <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold text-gray-800">Create Account</h1>
-        <p class="text-gray-600 mt-2">Sign up to start using our platform</p>
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900/90 to-teal-900 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-5xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row">
+    <!-- Illustration Side -->
+    <div class="md:w-1/2 bg-gradient-to-br from-blue-600 to-indigo-800 flex items-center justify-center p-12">
+      <div class="text-center">
+        <h2 class="text-4xl font-bold text-white mb-6 tracking-tight">DocScan</h2>
+        <p class="text-white/90 text-base mb-8 leading-relaxed">DocScan is an intelligent document scanning platform that analyzes and matches documents with precision, providing accurate similarity scores.</p>
+        <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto mb-8 w-72 h-72" viewBox="0 0 100 100">
+          <defs>
+            <linearGradient id="scannerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:white;stop-opacity:0.3"/>
+              <stop offset="100%" style="stop-color:white;stop-opacity:0.1"/>
+            </linearGradient>
+          </defs>
+          
+          <!-- Paper Scanning Illustration -->
+          <g fill="url(#scannerGradient)">
+            <!-- Scanner Base -->
+            <rect x="20" y="70" width="60" height="10" rx="2" ry="2"/>
+            
+            <!-- Scanner Body -->
+            <rect x="25" y="30" width="50" height="40" rx="3" ry="3"/>
+            
+            <!-- Paper being Scanned -->
+            <path d="M35 45 L65 45 C67 45, 68 46, 68 48 L68 55 C68 57, 67 58, 65 58 L35 58 C33 58, 32 57, 32 55 L32 48 C32 46, 33 45, 35 45 Z" />
+            
+            <!-- Scanning Light Effect -->
+            <rect x="32" y="47" width="36" height="2" fill="white" opacity="0.5">
+              <animate 
+                attributeName="y" 
+                values="47;53;47" 
+                dur="2s" 
+                repeatCount="indefinite"
+              />
+            </rect>
+          </g>
+        </svg>
       </div>
+    </div>
 
-      <% if (error && error.length > 0) { %>
-        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6" role="alert">
-          <p><%= error %></p>
-        </div>
-      <% } %>
-
+    <!-- Registration Form Side -->
+    <div class="md:w-1/2 p-12 flex flex-col justify-center">
       <form action="/auth/register" method="POST" class="space-y-6">
-        <div>
-          <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
-          <div class="mt-1">
-            <input id="username" name="username" type="text" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="johndoe">
+        <div class="text-center mb-8">
+          <h3 class="text-2xl font-semibold text-gray-800 mb-2">Create Your Account</h3>
+          <p class="text-gray-500 text-sm">Start your document scanning journey today</p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label for="username" class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+            <input id="username" name="username" type="text" required 
+              class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm 
+              transition duration-300 ease-in-out hover:border-indigo-400" 
+              placeholder="Choose a username">
+          </div>
+
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+            <input id="email" name="email" type="email" required 
+              class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm
+              transition duration-300 ease-in-out hover:border-indigo-400" 
+              placeholder="Enter email">
           </div>
         </div>
 
-        <div>
-          <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-          <div class="mt-1">
-            <input id="email" name="email" type="email" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="your@email.com">
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+            <input id="password" name="password" type="password" required 
+              class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm
+              transition duration-300 ease-in-out hover:border-indigo-400" 
+              placeholder="Create password">
+            <p class="mt-2 text-xs text-gray-500">Must be at least 6 characters</p>
           </div>
-        </div>
 
-        <div>
-          <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-          <div class="mt-1">
-            <input id="password" name="password" type="password" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="••••••••">
-          </div>
-          <p class="mt-1 text-xs text-gray-500">Must be at least 6 characters</p>
-        </div>
-
-        <div>
-          <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Confirm Password</label>
-          <div class="mt-1">
-            <input id="confirmPassword" name="confirmPassword" type="password" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="••••••••">
+          <div>
+            <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
+            <input id="confirmPassword" name="confirmPassword" type="password" required 
+              class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm
+              transition duration-300 ease-in-out hover:border-indigo-400" 
+              placeholder="Confirm password">
           </div>
         </div>
 
         <div class="flex items-center">
-          <input id="terms" name="terms" type="checkbox" required class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+          <input id="terms" name="terms" type="checkbox" required 
+            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
           <label for="terms" class="ml-2 block text-sm text-gray-700">
             I agree to the
-            <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">Terms and Conditions</a>
+            <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500 ml-1">Terms and Conditions</a>
           </label>
         </div>
 
         <div>
-          <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+          <button type="submit" 
+            class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 
+            transition duration-300 ease-in-out transform hover:scale-105">
             Create Account
           </button>
         </div>
       </form>
-    </div>
-    
-    <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 sm:px-10">
-      <p class="text-sm text-center text-gray-600">
-        Already have an account?
-        <a href="/auth/login" class="font-medium text-indigo-600 hover:text-indigo-500">
-          Sign in
-        </a>
-      </p>
+
+      <div class="mt-6 text-center bg-gray-50 border-t border-gray-200 py-4 rounded-b-xl">
+        <p class="text-sm text-gray-600">
+          Already have an account?
+          <a href="/auth/login" class="font-medium text-indigo-600 hover:text-indigo-500 ml-1">
+            Sign in
+          </a>
+        </p>
+      </div>
     </div>
   </div>
 </div>
