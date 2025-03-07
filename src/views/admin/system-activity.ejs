@@ -1,0 +1,55 @@
+<% layout('layouts/boilerplate') %>
+<section class="flex min-h-screen bg-gradient-to-b from-blue-300/15 to-teal-200/15">
+  <%- include('../partials/sidebar', { currentPage: 'admin-system-activity' }) %>
+
+  <div class="ml-64 w-full">
+    <main class="h-[93vh] p-6 overflow-y-auto">
+      <div class="flex justify-between items-center mb-6 border-b pb-4">
+        <h1 class="text-3xl font-bold text-gray-800">System Activity</h1>
+        <div class="flex space-x-3 text-sm text-gray-600">
+          <span>Welcome, <%= user.username %></span>
+          <span class="text-gray-500">Last Login: <%= new Date().toLocaleString() %></span>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-lg shadow-md">
+        <h2 class="text-xl font-semibold text-gray-700 mb-4">Activity Logs</h2>
+        <div class="overflow-y-auto max-h-[65vh] border rounded-lg">
+          <table class="w-full text-sm text-left text-gray-600">
+            <thead class="bg-gray-100 text-gray-700 uppercase">
+              <tr>
+                <th class="px-4 py-2">Timestamp</th>
+                <th class="px-4 py-2">User</th>
+                <th class="px-4 py-2">Action</th>
+                <th class="px-4 py-2">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (logs.length > 0) { %>
+                <% logs.forEach(log => { %>
+                  <tr class="border-b hover:bg-gray-50">
+                    <td class="px-4 py-2"><%= log.createdAt.toLocaleString() %></td>
+                    <td class="px-4 py-2"><%= log.username %></td>
+                    <td class="px-4 py-2"><%= log.action %></td>
+                    <td class="px-4 py-2">
+                      <span class="px-2 py-1 rounded text-white 
+                        <%= log.status === 'success' ? 'bg-green-500' : 'bg-red-500' %>">
+                        <%= log.status %>
+                      </span>
+                    </td>
+                  </tr>
+                <% }) %>
+              <% } else { %>
+                <tr>
+                  <td colspan="4" class="text-center py-4 text-gray-500">No activity logs available</td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <%- include('../partials/footer') %>
+  </div>
+</section>

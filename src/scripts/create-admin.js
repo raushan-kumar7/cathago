@@ -38,8 +38,8 @@ const initializeAdmin = async () => {
     console.log(`👤 Admin Details:`);
     console.log(`🆔 ID: ${admin.id}`);
     console.log(`👤 Username: ${admin.username}`);
-    console.log(`✉️ Email: ${admin.email}`);
-    console.log(`🛡️ Role: ${admin.role}`);
+    console.log(`✉️  Email: ${admin.email}`);
+    console.log(`🛡️  Role: ${admin.role}`);
 
     process.exit(0);
   } catch (error) {

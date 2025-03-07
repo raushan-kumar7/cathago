@@ -3,6 +3,9 @@ import User from "./user.model.js";
 import Document from "./document.model.js";
 import Scan from "./scan.model.js";
 import CreditRequest from "./credit_request.model.js";
+import AIMatch from "./ai_match.model.js";
+import AIScan from "./ai_scan.model.js";
+import SystemLog from "./system_log.model.js";
 
 // Define associations
 User.hasMany(Document, { foreignKey: "userId" });
@@ -22,11 +25,17 @@ CreditRequest.belongsTo(User, { foreignKey: "userId", as: "requester" });
 User.hasMany(CreditRequest, { foreignKey: "reviewedBy" });
 CreditRequest.belongsTo(User, { foreignKey: "reviewedBy", as: "reviewer" });
 
+SystemLog.belongsTo(User, { foreignKey: "userId", as: "User" }); 
+User.hasMany(SystemLog, { foreignKey: "userId", as: "logs" });
+
 const models = {
   User,
   Document,
   Scan,
   CreditRequest,
+  AIMatch,
+  AIScan,
+  SystemLog,
   sequelize,
 };
 

@@ -3,12 +3,18 @@ import {
   get_credits_requests,
   process_credit_request,
 } from "../services/credit_request.service.js";
-import { 
-  deleteDoc, 
+import {
+  deleteDoc,
   getAllDocuments,
-  getDocumentDetails 
+  getDocumentDetails,
 } from "../services/document.service.js";
 import { asyncHandler } from "../utils/AsyncHandler.js";
+import {
+  getSystemLogs,
+  logError,
+  logInfo,
+  logWarning,
+} from "../services/system_log.service.js";
 
 // Render Admin Dashboard
 const renderAdminDashboard = asyncHandler(async (req, res) => {
@@ -16,14 +22,15 @@ const renderAdminDashboard = asyncHandler(async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = 10;
 
-    const { 
-      documents, 
-      totalDocuments, 
-      totalPages, 
-      currentPage 
-    } = await getAllDocuments(page, limit);
+    const { documents, totalDocuments, totalPages, currentPage } =
+      await getAllDocuments(page, limit);
 
     const stats = await get_stats();
+
+    await logInfo("admin", "Admin dashboard accessed", {
+      userId: req.user.id,
+      ipAddress: req.ip,
+    });
 
     return res.render("admin/index", {
       title: "Admin Dashboard | DocScan",
@@ -37,7 +44,12 @@ const renderAdminDashboard = asyncHandler(async (req, res) => {
       url: req.originalUrl,
     });
   } catch (error) {
-    console.error("Dashboard rendering error:", error);
+    //console.error("Dashboard rendering error:", error);
+    await logError("admin", "Dashboard rendering error", {
+      userId: req.user?.id,
+      ipAddress: req.ip,
+      metadata: { error: error.message },
+    });
     req.flash("error", error.message || "Could not load dashboard");
     return res.redirect("/admin/dashboard");
   }
@@ -49,11 +61,10 @@ const listDocuments = asyncHandler(async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = 10;
 
-    const { 
-      documents, 
-      totalPages, 
-      currentPage 
-    } = await getAllDocuments(page, limit);
+    const { documents, totalPages, currentPage } = await getAllDocuments(
+      page,
+      limit
+    );
 
     return res.render("admin/documents", {
       title: "All Documents | DocScan",
@@ -72,18 +83,17 @@ const listDocuments = asyncHandler(async (req, res) => {
   }
 });
 
-
 // Get Document Details
 const getDocumentDetailsController = asyncHandler(async (req, res) => {
   try {
     const documentId = req.params.id;
-    
+
     const document = await getDocumentDetails(documentId);
-    
-    if (req.headers.accept.includes('application/json')) {
+
+    if (req.headers.accept.includes("application/json")) {
       return res.json(document);
     }
-    
+
     return res.render("admin/document-details", {
       title: "Document Details | DocScan",
       user: req.user,
@@ -92,15 +102,15 @@ const getDocumentDetailsController = asyncHandler(async (req, res) => {
       success: req.flash("success"),
     });
   } catch (error) {
-    console.error('Error fetching document details:', error);
-    
-    if (req.headers.accept.includes('application/json')) {
-      return res.status(500).json({ 
-        message: 'Could not fetch document details',
-        error: error.message 
+    console.error("Error fetching document details:", error);
+
+    if (req.headers.accept.includes("application/json")) {
+      return res.status(500).json({
+        message: "Could not fetch document details",
+        error: error.message,
       });
     }
-    
+
     req.flash("error", error.message || "Could not fetch document details");
     return res.redirect("/admin/documents");
   }
@@ -112,16 +122,38 @@ const deleteDocument = asyncHandler(async (req, res) => {
     const { documentId } = req.body;
 
     // Ensure only admin can delete
+    // if (req.user.role !== "admin") {
+    //   req.flash("error", "Unauthorized access");
+    //   return res.redirect("/admin/documents");
+    // }
+
     if (req.user.role !== "admin") {
+      await logWarning("security", "Unauthorized document deletion attempt", {
+        userId: req.user.id,
+        ipAddress: req.ip,
+        metadata: { documentId },
+      });
+
       req.flash("error", "Unauthorized access");
       return res.redirect("/admin/documents");
     }
 
     await deleteDoc(documentId, null);
 
+    await logInfo("document", "Document deleted by admin", {
+      userId: req.user.id,
+      ipAddress: req.ip,
+      metadata: { documentId },
+    });
+
     req.flash("success", "Document deleted successfully");
     return res.redirect("/admin/documents");
   } catch (error) {
+    await logError("document", "Document deletion error", {
+      userId: req.user?.id,
+      ipAddress: req.ip,
+      metadata: { documentId: req.body.documentId, error: error.message },
+    });
     console.error("Document deletion error:", error);
     req.flash("error", error.message || "Failed to delete document");
     return res.redirect("/admin/documents");
@@ -131,12 +163,7 @@ const deleteDocument = asyncHandler(async (req, res) => {
 // List Users
 const userLists = asyncHandler(async (req, res) => {
   try {
-    const { 
-      users, 
-      totalUsers, 
-      totalPages, 
-      currentPage 
-    } = await list_users();
+    const { users, totalUsers, totalPages, currentPage } = await list_users();
 
     return res.render("admin/users", {
       title: "User Lists | DocScan",
@@ -158,14 +185,10 @@ const userLists = asyncHandler(async (req, res) => {
 // Credit Request List
 const creditRequestList = asyncHandler(async (req, res) => {
   try {
-    const { 
-      requests, 
-      totalRequests, 
-      totalPages, 
-      currentPage 
-    } = await get_credits_requests(req.query.page || 1, 10, {
-      status: "pending",
-    });
+    const { requests, totalRequests, totalPages, currentPage } =
+      await get_credits_requests(req.query.page || 1, 10, {
+        status: "pending",
+      });
 
     return res.render("admin/credit-requests", {
       title: "Credit Requests | DocScan",
@@ -222,11 +245,45 @@ const processCreditRequest = asyncHandler(async (req, res) => {
       reviewNotes || ""
     );
 
+    await logInfo("credit", `Credit request ${status} by admin`, {
+      userId: req.user.id,
+      ipAddress: req.ip,
+      metadata: { requestId, status, reviewNotes },
+    });
+
     req.flash("success", `Credit request ${status} successfully`);
     return res.redirect("/admin/credit-requests");
   } catch (error) {
+    await logError("credit", "Credit request processing error", {
+      userId: req.user?.id,
+      ipAddress: req.ip,
+      metadata: {
+        requestId: req.body.requestId,
+        status: req.body.status,
+        error: error.message,
+      },
+    });
     req.flash("error", error.message || "Failed to process credit request");
     return res.redirect("/admin/credit-requests");
+  }
+});
+
+const getSystemActivity = asyncHandler(async (req, res) => {
+  try {
+    const logs = await getSystemLogs();
+
+  
+    return res.render("admin/system-activity", {
+      title: "System Activity | DocScan",
+      user: req.user,
+      logs: logs,
+      error: req.flash("error"),
+      success: req.flash("success"),
+      currentPage: "admin-system-activity",
+    });
+  } catch (error) {
+    req.flash("error", "Could not fetch system logs");
+    return res.redirect("/admin/dashboard");
   }
 });
 
@@ -238,4 +295,5 @@ export {
   listDocuments,
   deleteDocument,
   getDocumentDetailsController,
+  getSystemActivity,
 };

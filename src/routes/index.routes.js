@@ -10,6 +10,8 @@ import scanRouter from "./scan.routes.js";
 import settingRouter from "./setting.routes.js";
 import creditRouter from "./credit.routes.js";
 import adminRouter from "./admin.routes.js";
+//import aiMatchRouter from "./ai_match.routes.js";
+//import aiScanRouter from "./ai-scan.routes.js";
 
 const idxRouter = Router();
 
@@ -27,5 +29,7 @@ idxRouter.use("/scans", scanRouter);
 idxRouter.use("/users", settingRouter);
 idxRouter.use("/credit-request", creditRouter);
 idxRouter.use("/admin", adminRouter);
+//idxRouter.use("/ai-matches", aiMatchRouter);
+//idxRouter.use("/ai-docs-scans", authenticate, aiScanRouter);
 
 export default idxRouter;
