@@ -5,8 +5,8 @@ const SQLiteSessionStore = SQLiteStore(session);
 
 const sessionOptions = {
   store: new SQLiteSessionStore({
-    db: "sessions.sqlite",
-    dir: './database',
+    db: "database.sqlite",
+    dir: '../../',
   }),
   secret: process.env.SESSION_SECRET || "fallback_secret_key",
   resave: false,
