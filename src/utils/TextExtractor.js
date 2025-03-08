@@ -3,7 +3,6 @@ import pdfParse from "pdf-parse";
 
 export const extractTextFromFile = async (filePath, fileType) => {
   try {
-    // Handle only PDF files
     if (fileType === "application/pdf") {
       const dataBuffer = await fs.readFile(filePath);
       const pdfData = await pdfParse(dataBuffer);

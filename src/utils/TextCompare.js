@@ -36,7 +36,7 @@ export const compareTexts = async (text1, text2, config = {}) => {
   return {
     matchScore: similarity,
     matchDetails: {
-      similarity: similarity * 100, // Convert to percentage
+      similarity: similarity * 100,
       highlightedSections: highlights,
       comparisonMethod: "basic",
       documentLengths: {

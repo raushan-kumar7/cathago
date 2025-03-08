@@ -1,4 +1,3 @@
-// services/ai-scan.service.js
 import models from "../models/index.js";
 import { get_user } from "./user.service.js";
 import { compareTextsWithAI, generateScanReport } from "../utils/TextCompare.js";
@@ -10,7 +9,6 @@ const { AIScan, Document, User } = models;
  */
 const createAIScan = async (userId, documentId1, documentId2, scanConfig = {}) => {
   try {
-    // Get both documents
     const doc1 = await Document.findOne({ where: { id: documentId1, userId } });
     const doc2 = await Document.findOne({ where: { id: documentId2, userId } });
 
@@ -18,13 +16,11 @@ const createAIScan = async (userId, documentId1, documentId2, scanConfig = {}) =
       throw new Error("One or both documents not found");
     }
 
-    // Check user has enough credits
     const user = await get_user(userId);
     if (user.credits < 1) {
       throw new Error("Insufficient credits");
     }
 
-    // Create pending scan record
     const scan = await AIScan.create({
       userId,
       documentId1,
@@ -36,12 +32,10 @@ const createAIScan = async (userId, documentId1, documentId2, scanConfig = {}) =
       status: "pending",
     });
 
-    // Process the AI comparison asynchronously
     processAIScan(scan.id, doc1.extractedText, doc2.extractedText, scanConfig)
       .then(() => console.log(`AI Scan ${scan.id} processed successfully`))
       .catch(err => console.error(`Error processing AI Scan ${scan.id}:`, err));
 
-    // Deduct credit
     await user.update({ credits: user.credits - 1 });
 
     return scan;
@@ -58,7 +52,6 @@ const processAIScan = async (scanId, text1, text2, scanConfig) => {
     const scan = await AIScan.findByPk(scanId);
     if (!scan) throw new Error("Scan not found");
 
-    // Compare the documents
     const { matchScore, matchDetails } = await compareTextsWithAI(
       text1,
       text2,
@@ -69,7 +62,6 @@ const processAIScan = async (scanId, text1, text2, scanConfig) => {
       }
     );
 
-    // Update scan record with results
     await scan.update({
       matchScore,
       matchDetails: JSON.stringify(matchDetails),

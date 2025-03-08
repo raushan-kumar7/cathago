@@ -16,7 +16,6 @@ import {
   logWarning,
 } from "../services/system_log.service.js";
 
-// Render Admin Dashboard
 const renderAdminDashboard = asyncHandler(async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -26,6 +25,8 @@ const renderAdminDashboard = asyncHandler(async (req, res) => {
       await getAllDocuments(page, limit);
 
     const stats = await get_stats();
+    
+    const systemLogs = await getSystemLogs({}, 5);
 
     await logInfo("admin", "Admin dashboard accessed", {
       userId: req.user.id,
@@ -39,12 +40,12 @@ const renderAdminDashboard = asyncHandler(async (req, res) => {
       documents: documents,
       totalPages: totalPages,
       currentPage: currentPage,
+      systemLogs: systemLogs,
       error: req.flash("error"),
       success: req.flash("success"),
       url: req.originalUrl,
     });
   } catch (error) {
-    //console.error("Dashboard rendering error:", error);
     await logError("admin", "Dashboard rendering error", {
       userId: req.user?.id,
       ipAddress: req.ip,
@@ -120,12 +121,6 @@ const getDocumentDetailsController = asyncHandler(async (req, res) => {
 const deleteDocument = asyncHandler(async (req, res) => {
   try {
     const { documentId } = req.body;
-
-    // Ensure only admin can delete
-    // if (req.user.role !== "admin") {
-    //   req.flash("error", "Unauthorized access");
-    //   return res.redirect("/admin/documents");
-    // }
 
     if (req.user.role !== "admin") {
       await logWarning("security", "Unauthorized document deletion attempt", {
@@ -268,15 +263,46 @@ const processCreditRequest = asyncHandler(async (req, res) => {
   }
 });
 
+
 const getSystemActivity = asyncHandler(async (req, res) => {
   try {
-    const logs = await getSystemLogs();
-
+    const page = parseInt(req.query.page) || 1;
+    const limit = 20;
+    const offset = (page - 1) * limit;
+    
+    const logLevel = req.query.level || 'all';
+    const category = req.query.category || 'all';
+    const date = req.query.date || null;
+    
+    const whereClause = {};
+    if (logLevel !== 'all') whereClause.logLevel = logLevel;
+    if (category !== 'all') whereClause.category = category;
+    if (date) {
+      const startDate = new Date(date);
+      const endDate = new Date(date);
+      endDate.setDate(endDate.getDate() + 1);
+      whereClause.createdAt = {
+        $gte: startDate,
+        $lt: endDate
+      };
+    }
+    
+    const logs = await getSystemLogs(whereClause, limit, offset);
+    const totalLogs = await SystemLog.count({ where: whereClause });
+    const totalPages = Math.ceil(totalLogs / limit);
   
     return res.render("admin/system-activity", {
       title: "System Activity | DocScan",
       user: req.user,
       logs: logs,
+      currentPage: page,
+      totalPages: totalPages,
+      totalLogs: totalLogs,
+      filters: {
+        level: logLevel,
+        category: category,
+        date: date
+      },
       error: req.flash("error"),
       success: req.flash("success"),
       currentPage: "admin-system-activity",

@@ -53,15 +53,6 @@ const createCreditsRequest = asyncHandler(async (req, res) => {
     const { reqCredits, reason } = req.body;
 
     const requestedCredits = parseInt(reqCredits, 10);
-    // if (!requestedCredits || requestedCredits <= 0) {
-    //   req.flash("error", "Invalid number of credits requested");
-    //   return res.redirect("/credit-request");
-    // }
-
-    // if (!reason || reason.trim().length < 10) {
-    //   req.flash("error", "Reason must be at least 10 characters long");
-    //   return res.redirect("/credit-request");
-    // }
 
     if (!requestedCredits || requestedCredits <= 0) {
       // Log validation error

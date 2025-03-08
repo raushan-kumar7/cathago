@@ -31,16 +31,6 @@ const register = asyncHandler(async (req, res) => {
   try {
     const { username, email, password, confirmPassword } = req.body;
 
-    // if (!username || !email || !password) {
-    //   req.flash("error", "All fields are required");
-    //   return res.redirect("/auth/register");
-    // }
-
-    // if (password !== confirmPassword) {
-    //   req.flash("error", "Passwords do not match");
-    //   return res.redirect("/auth/register");
-    // }
-
     if (!username || !email || !password) {
       await logWarning("auth", "Registration attempt with missing fields", {
         ipAddress: req.ip,
@@ -103,11 +93,6 @@ const register = asyncHandler(async (req, res) => {
 const login = asyncHandler(async (req, res) => {
   try {
     const { email, password } = req.body;
-
-    // if (!email || !password) {
-    //   req.flash("error", "Email and password are required");
-    //   return res.redirect("/auth/login");
-    // }
 
     if (!email || !password) {
       await logWarning("auth", "Login attempt with missing credentials", {

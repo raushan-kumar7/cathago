@@ -1,4 +1,3 @@
-// services/systemLog.service.js
 import SystemLog from "../models/system_log.model.js";
 import User from "../models/user.model.js";
 
@@ -177,33 +176,10 @@ export const getLogsByLevel = async (logLevel, { limit = 100, offset = 0 } = {})
   }
 };
 
-// export const getSystemLogs = async () => {
-//   try {
-//     return await SystemLog.findAll({
-//       attributes: {
-//         include: [
-//           [
-//             SystemLog.belongsTo(User, {
-//               as: "User",
-//               foreignKey: "userId",
-//             }),
-//             {
-//               attributes: ["id", "username"],
-//             },
-//           ],
-//         ],
-//       },
-//       order: [['createdAt', 'DESC']],
-//     });
-//   } catch (error) {
-//     console.error("Error fetching system logs:", error);
-//     return [];
-//   }
-// };
-
-export const getSystemLogs = async () => {
+export const getSystemLogs = async (whereClause = {}, limit = 100, offset = 0) => {
   try {
     return await SystemLog.findAll({
+      where: whereClause,
       include: [
         {
           model: User,
@@ -212,6 +188,8 @@ export const getSystemLogs = async () => {
         },
       ],
       order: [["createdAt", "DESC"]],
+      limit,
+      offset
     });
   } catch (error) {
     console.error("Error fetching system logs:", error);
