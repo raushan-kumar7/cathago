@@ -136,6 +136,13 @@
 | 🟢 GET    | `/admin/export-logs`             | 📤 Exports system logs | 🔒 Admin Only |
 
 ### DocScan Website Images
+<img width="950px;" src="https://res.cloudinary.com/cloud-alpha/image/upload/v1741434947/Common/home_a5jisu.png"/>
+<img width="950px;" src="https://res.cloudinary.com/cloud-alpha/image/upload/v1741434947/Common/home1_luzsdl.png"/>
+<img width="950px;" src="https://res.cloudinary.com/cloud-alpha/image/upload/v1741434783/Common/login_pdvgzt.png"/>
+<img width="950px;" src="https://res.cloudinary.com/cloud-alpha/image/upload/v1741434783/Common/register_cqh2xb.png"/>
+<img width="950px;" src="https://res.cloudinary.com/cloud-alpha/image/upload/v1741434782/Common/user-dash_tnr8qn.png"/>
+<img width="950px;" src="https://res.cloudinary.com/cloud-alpha/image/upload/v1741434782/Common/scan_reryw8.png"/>
+<img width="950px;" src="https://res.cloudinary.com/cloud-alpha/image/upload/v1741435157/Common/admin-dash_ppyxgd.png"/>
 
 ## 🛠️ Installation Steps  
 
