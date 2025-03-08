@@ -134,3 +134,46 @@
 | 🟢 GET    | `/admin/documents/:id`           | 📜 Fetches document details | 🔒 Admin Only |
 | 🟢 GET    | `/admin/system-activity`         | 📊 Fetches system activity logs | 🔒 Admin Only |
 | 🟢 GET    | `/admin/export-logs`             | 📤 Exports system logs | 🔒 Admin Only |
+
+### DocScan Website Images
+
+## 🛠️ Installation Steps  
+
+Follow these steps to set up and run the project on your local machine.  
+
+### **1️⃣ Clone the Repository**  
+```sh
+git clone https://github.com/your-username/cathago.git
+cd cathago
+```
+
+### **2️⃣ Install Dependencies**  
+```sh
+npm install
+```
+
+### **3️⃣ Set Up Environment Variables**  
+Create a `.env` file in the root directory and add the necessary configurations. Use the `.env.example` file as a reference.  
+
+### **4️⃣ Run the Development Server**  
+```sh
+npm run dev
+```
+Your app will be running at **[http://localhost:3400](http://localhost:3400)** 🚀  
+
+### **5️⃣ Start the Production Server**  
+```sh
+npm start
+```
+
+### **6️⃣ Build TailwindCSS (Optional, for UI changes)**  
+```sh
+npm run build:css
+```
+
+### **7️⃣ Create an Admin User (Optional, for first-time setup)**  
+```sh
+npm run create-admin
+```
+
+Now, your **DocScan** system is ready to use! 🎉
