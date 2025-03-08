@@ -1,6 +1,10 @@
 # DocScan - Automate, Scan, Match, Secure Docs
 **DocScan** is a powerful, self-contained document scanning and matching system designed for secure and efficient document management. It leverages AI-powered text extraction, PDF and Word file parsing, and intelligent document matching. With robust authentication, credit-based access, and an intuitive UI, users can securely upload, scan, and manage documents. Admins can oversee user activities, credit requests, and system logs. DocScan ensures seamless workflow automation, enhancing productivity while maintaining top-tier security and accuracy in document processing. 
 
+#### **🌐 Live Link**
+
+[![Live Website](https://img.shields.io/badge/Live_Link-0099ff?style=for-the-badge&logo=googlecloud&logoColor=white)](https://cathago.onrender.com)
+
 ## 🚀 Features  
 
 ### 🔐 **Secure Authentication & Access Control**  
