@@ -1,37 +1,71 @@
 # DocScan - Automate, Scan, Match, Secure Docs
 **DocScan** is a powerful, self-contained document scanning and matching system designed for secure and efficient document management. It leverages AI-powered text extraction, PDF and Word file parsing, and intelligent document matching. With robust authentication, credit-based access, and an intuitive UI, users can securely upload, scan, and manage documents. Admins can oversee user activities, credit requests, and system logs. DocScan ensures seamless workflow automation, enhancing productivity while maintaining top-tier security and accuracy in document processing. 
 
+## 🚀 Features  
+
+### 🔐 **Secure Authentication & Access Control**  
+✔️ User authentication using **JWT** 🔑  
+✔️ Secure password hashing with **BcryptJS** 🔒  
+✔️ Role-based access control for **Users & Admins** 🏢  
+
+### 📄 **Advanced Document Management**  
+✔️ Upload and store **PDF & DOCX** files 📂  
+✔️ Extract text using **PDF-Parse & Mammoth** 📜  
+✔️ AI-powered document matching with **OpenAI & Google AI** 🤖  
+
+### 🎯 **AI-Powered Scanning & Matching**  
+✔️ Smart document comparison & text similarity analysis 🧠  
+✔️ AI-driven insights for document verification 🔍  
+✔️ Export scan reports for reference 📑  
+
+### 💰 **Credit-Based System**  
+✔️ Users require credits to perform document scans 💳  
+✔️ Request and manage credits via the admin panel ⚖️  
+
+### 📊 **User & Admin Dashboard**  
+✔️ View uploaded documents & scan history 🗂️  
+✔️ Monitor credit usage and activity 📈  
+✔️ Admins can manage users, documents, and logs ⚙️  
+
+### 🎨 **Modern & Responsive UI**  
+✔️ Built with **EJS-Mate** templating 🎭  
+✔️ Styled using **TailwindCSS** for a sleek interface 🎨  
+✔️ Fully responsive for desktop & mobile 📱  
+
+### 🛡️ **Robust Security & Performance**  
+✔️ Secure session management with **Helmet** 🛡️  
+✔️ Optimized performance with **SQLite & Sequelize** ⚡  
+✔️ File system utilities with **Multer & FS-Extra** 📁
+
 ## 🛠️ Tech Stack  
+
 ### **Backend**  
-- 🟢 **Node.js** – JavaScript runtime  
-- ⚡ **Express.js** – Web framework  
+✔️ 🟢 **Node.js** – JavaScript runtime  
+✔️ ⚡ **Express.js** – Web framework  
 
 ### **Database**  
-- 🗄️ **SQLite** – Lightweight database  
-- 🔗 **Sequelize** – ORM for database management  
+✔️ 🗄️ **SQLite** – Lightweight database  
+✔️ 🔗 **Sequelize** – ORM for database management  
 
 ### **Security**  
-- 🔑 **JWT** – Authentication & authorization  
-- 🛡️ **Helmet** – Security middleware  
-- 🔒 **BcryptJS** – Password hashing  
+✔️ 🔑 **JWT** – Authentication & authorization  
+✔️ 🛡️ **Helmet** – Security middleware  
+✔️ 🔒 **BcryptJS** – Password hashing  
 
 ### **Templating & UI**  
-- 🎨 **EJS-Mate** – Enhanced templating engine  
-- 🎨 **TailwindCSS** – Utility-first CSS framework  
+✔️ 🎨 **EJS-Mate** – Enhanced templating engine  
+✔️ 🎨 **TailwindCSS** – Utility-first CSS framework  
 
 ### **File Handling & AI**  
-- 📂 **Multer** – File uploads  
-- 📁 **FS-Extra** – File system utilities  
-- 📜 **PDF-Parse** – Extract text from PDFs  
-- 📄 **Mammoth** – Extract text from DOCX files  
-- 🤖 **OpenAI & Google Generative AI** – AI-powered document matching  
+✔️ 📂 **Multer** – File uploads  
+✔️ 📁 **FS-Extra** – File system utilities  
+✔️ 📜 **PDF-Parse** – Extract text from PDFs  
+✔️ 📄 **Mammoth** – Extract text from DOCX files  
+✔️ 🤖 **OpenAI & Google Generative AI** – AI-powered document matching  
 
-## 🔧 Key Features  
-✅ Secure authentication & session management  
-✅ AI-powered document scanning & matching  
-✅ PDF & Word file parsing  
-✅ Credit-based system for controlled access  
-✅ Responsive UI with TailwindCSS  
+### **Database Schema Image**
+
+<img width="950px;" src="https://res.cloudinary.com/cloud-alpha/image/upload/v1741433490/Common/DocScan-Schema_r9aahw.png"/>
 
 ## API End Points
 ### 🏠 Home Routes  
