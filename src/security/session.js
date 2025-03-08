@@ -1,6 +1,13 @@
 import session from "express-session";
+import SQLiteStore from "connect-sqlite3";
+
+const SQLiteSessionStore = SQLiteStore(session);
 
 const sessionOptions = {
+  store: new SQLiteSessionStore({
+    db: "sessions.sqlite",
+    dir: './database',
+  }),
   secret: process.env.SESSION_SECRET || "fallback_secret_key",
   resave: false,
   saveUninitialized: false,

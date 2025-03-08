@@ -776,8 +776,6 @@ const createDocScan = asyncHandler(async (req, res) => {
         matchPercentage: scan.matchPercentage 
       }
     });
-
-    console.log("Scan Id: ", scan.id);
     
     req.flash("success", "Scan completed successfully");
     return res.redirect(`/scans/${scan.id}`);
